@@ -5,12 +5,20 @@ use Illuminate\Support\Facades\Route;
 
 use App\Models\Equipment;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\EquipmentReportController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::resource('equipments', EquipmentController::class);
+
+Route::get('reports', [EquipmentReportController::class, 'index'])
+    -> name('reports.index');
+
+Route::get('reports/pdf', [EquipmentReportController::class, 'exportPdf'])
+    -> name('reports.pdf');
+
 
 
 // BREEZE LOGIN

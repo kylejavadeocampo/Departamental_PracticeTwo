@@ -30,50 +30,79 @@ class EquipmentController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+    {   
         //
         $validated = $request -> validate([
-            'EquipmentName' => 'required', 
-            'Category'      => 'required',
-            'UnitPrice'     => 'required',    
-            'Description'   => 'required',
-            'Availability'  => 'required'
+            'name'          => 'required', 
+            'category'      => 'required',
+            'price'         => 'required',    
+            'description'   => 'required',
+            'availability'  => 'required'
         ]);
 
-        Equipment::create($validated -> all());
+        Equipment::create([
+            'user_id'       => $user_id = $request -> user() -> id,
+            'EquipmentName' => $validated['name'],
+            'Category'      => $validated['category'],
+            'UnitPrice'     => $validated['price'],
+            'Description'   => $validated['description'],
+            'Availability'  => $validated['availability'],
+        ]);
 
-        return redirect() -> route('dashboard');
+        return redirect() -> route('equipments.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(EquipmentController $equipmentController)
+    public function show(Equipment $equipment)
     {
         //
+        return view('equipments.show', compact('equipment'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(EquipmentController $equipmentController)
+    public function edit(Equipment $equipment)
     {
         //
+        return view('equipments.edit', compact('equipment'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, EquipmentController $equipmentController)
+    public function update(Request $request, Equipment $equipment)
     {
         //
+        $validated = $request -> validate([
+            'name'          => 'required', 
+            'category'      => 'required',
+            'price'         => 'required',    
+            'description'   => 'required',
+            'availability'  => 'required'
+        ]);
+
+        $equipment -> update([
+            'EquipmentName' => $validated['name'],
+            'Category'      => $validated['category'],
+            'UnitPrice'     => $validated['price'],
+            'Description'   => $validated['description'],
+            'Availability'  => $validated['availability'],
+        ]);
+
+        return redirect() -> route('equipments.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EquipmentController $equipmentController)
+    public function destroy(Equipment $equipment)
     {
         //
+        $equipment -> delete();
+
+        return redirect() -> route('equipments.index');
     }
 }

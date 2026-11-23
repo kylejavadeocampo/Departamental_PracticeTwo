@@ -8,11 +8,16 @@ class Equipment extends Model
 {
     //
     protected $table = 'equipments';
-    protected $fillabe =[
+    protected $fillable =[
+        'user_id',
         'EquipmentName', 
         'Category',
         'UnitPrice',
         'Description',
         'Availability'
     ];
+
+    public function user() {
+        return $this -> belongsTo(User::class);
+    }
 }
